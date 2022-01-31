@@ -29,27 +29,21 @@
               <h2 class="title title--small sheet__title">Выберите тесто</h2>
 
               <div class="sheet__content dough">
-                <label class="dough__input dough__input--light">
+                <label
+                  class="dough__input"
+                  :class="doughSize(dough)"
+                  v-for="(dough, key) in pizza.dough"
+                  :key="'dough-' + key"
+                >
                   <input
                     type="radio"
                     name="dought"
-                    value="light"
-                    class="visually-hidden"
-                    checked
-                  />
-                  <b>Тонкое</b>
-                  <span>Из твердых сортов пшеницы</span>
-                </label>
-
-                <label class="dough__input dough__input--large">
-                  <input
-                    type="radio"
-                    name="dought"
-                    value="large"
+                    :value="dough.price"
+                    v-model="order.dough"
                     class="visually-hidden"
                   />
-                  <b>Толстое</b>
-                  <span>Из твердых сортов пшеницы</span>
+                  <b>{{ dough.name }}</b>
+                  <span>{{ dough.description }}</span>
                 </label>
               </div>
             </div>
@@ -60,33 +54,20 @@
               <h2 class="title title--small sheet__title">Выберите размер</h2>
 
               <div class="sheet__content diameter">
-                <label class="diameter__input diameter__input--small">
+                <label
+                  class="diameter__input"
+                  :class="'diameter__input--' + pizzaSize(size)"
+                  v-for="(size, key) in pizza.sizes"
+                  :key="'size-' + key"
+                >
                   <input
                     type="radio"
                     name="diameter"
-                    value="small"
+                    :value="size.multiplier"
+                    v-model="order.size"
                     class="visually-hidden"
                   />
-                  <span>23 см</span>
-                </label>
-                <label class="diameter__input diameter__input--normal">
-                  <input
-                    type="radio"
-                    name="diameter"
-                    value="normal"
-                    class="visually-hidden"
-                    checked
-                  />
-                  <span>32 см</span>
-                </label>
-                <label class="diameter__input diameter__input--big">
-                  <input
-                    type="radio"
-                    name="diameter"
-                    value="big"
-                    class="visually-hidden"
-                  />
-                  <span>45 см</span>
+                  <span>{{ size.name }}</span>
                 </label>
               </div>
             </div>
@@ -540,7 +521,27 @@ export default {
       misc,
       pizza,
       user,
+      order: {
+        dough: null,
+      },
     };
+  },
+  methods: {
+    doughSize(dough) {
+      return "dough__input--" + (dough.name == "Тонкое" ? "light" : "large");
+    },
+    pizzaSize(size) {
+      switch (size.multiplier) {
+        case 1:
+          return "small";
+        case 2:
+          return "normal";
+        case 3:
+          return "big";
+        default:
+          break;
+      }
+    },
   },
 };
 </script>
