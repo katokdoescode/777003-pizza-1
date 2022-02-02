@@ -18,7 +18,7 @@
         </div>
       </div>
     </div>
-    <slot name="PriceCounter" />
+    <slot />
   </div>
 </template>
 <script>
