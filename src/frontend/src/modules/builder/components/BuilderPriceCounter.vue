@@ -1,7 +1,12 @@
 <template>
-  <div></div>
+  <div class="content__result">
+    <p>Итого: 0 ₽</p>
+    <button type="button" class="button" disabled>Готовьте!</button>
+  </div>
 </template>
 <script>
-export default {};
+export default {
+  name: "PriceCounter",
+};
 </script>
 <style></style>
