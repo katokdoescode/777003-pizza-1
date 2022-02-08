@@ -23,34 +23,23 @@
           <ul class="ingredients__list">
             <li
               class="ingredients__item"
-              v-for="(ingredient, key) in ingredients"
-              :key="'ingredient-' + key"
+              v-for="ingredient in ingredients"
+              :key="'ingredient-' + ingredient.id"
             >
               <span class="filling" :class="getIngredientClass(ingredient)">
                 {{ ingredient.name }}
               </span>
-
-              <div class="counter counter--orange ingredients__counter">
-                <button
-                  type="button"
-                  class="counter__button counter__button--minus"
-                  disabled
-                >
-                  <span class="visually-hidden">Меньше</span>
-                </button>
-                <input
-                  type="text"
-                  name="counter"
-                  class="counter__input"
-                  value="0"
-                />
-                <button
-                  type="button"
-                  class="counter__button counter__button--plus"
-                >
-                  <span class="visually-hidden">Больше</span>
-                </button>
-              </div>
+              <item-counter
+                :count="
+                  ingredientsCount[ingredient.id]
+                    ? ingredientsCount[ingredient.id]
+                    : 0
+                "
+                :id="ingredient.id"
+                @counterPlus="addIngredient"
+                @counterMinus="removeIngredient"
+                @changeCount="changeIngredientCount"
+              />
             </li>
           </ul>
         </div>
@@ -59,8 +48,14 @@
   </div>
 </template>
 <script>
+import ItemCounter from "@/common/components/ItemCounter.vue";
 export default {
-  name: "IngreDientsSelector",
+  name: "IngredientsSelector",
+  data() {
+    return {
+      ingredientsCount: {},
+    };
+  },
   props: {
     ingredients: {
       type: Array,
@@ -71,10 +66,31 @@ export default {
       required: true,
     },
   },
+  components: {
+    ItemCounter,
+  },
   methods: {
     getIngredientClass(ingredient) {
       const imagePath = ingredient.image.split("/");
       return imagePath[3] + "--" + imagePath[4].slice(0, -4);
+    },
+    changeIngredientCount(data) {
+      this.$set(this.ingredientsCount, data.id, data.value);
+    },
+    // Есть смысл обернуть эти два метода в один, и передавать просто дополнительынй параметр?
+    addIngredient(ingredientId) {
+      if (this.ingredientsCount[ingredientId]) {
+        this.ingredientsCount[ingredientId]++;
+      } else {
+        this.$set(this.ingredientsCount, ingredientId, 1);
+      }
+    },
+    removeIngredient(ingredientId) {
+      if (this.ingredientsCount[ingredientId]) {
+        this.ingredientsCount[ingredientId]--;
+      } else {
+        this.$set(this.ingredientsCount, ingredientId, 0);
+      }
     },
   },
 };
