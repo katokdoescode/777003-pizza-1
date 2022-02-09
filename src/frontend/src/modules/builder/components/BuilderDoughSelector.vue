@@ -4,26 +4,25 @@
       <h2 class="title title--small sheet__title">Выберите тесто</h2>
 
       <div class="sheet__content dough">
-        <label
-          class="dough__input"
-          :class="getDoughSize(dough)"
-          v-for="(doughItem, key) in dough"
-          :key="'dough-' + key"
+        <radio-button
+          v-for="doughItem in dough"
+          :key="'dough-' + doughItem.id"
+          :radioBtnValue="doughItem.name"
+          :class="['dough__input', getDoughSize(dough)]"
+          :radioBtnClass="['visually-hidden']"
+          radioBtnName="dought"
         >
-          <input
-            type="radio"
-            name="dought"
-            :value="doughItem.name"
-            class="visually-hidden"
-          />
-          <b>{{ doughItem.name }}</b>
-          <span>{{ doughItem.description }}</span>
-        </label>
+          <template v-slot>
+            <b>{{ doughItem.name }}</b>
+            <span>{{ doughItem.description }}</span>
+          </template>
+        </radio-button>
       </div>
     </div>
   </div>
 </template>
 <script>
+import RadioButton from "@/common/components/RadioButton.vue";
 export default {
   name: "DoughSelector",
   props: {
@@ -32,6 +31,7 @@ export default {
       required: true,
     },
   },
+  components: { RadioButton },
   methods: {
     getDoughSize(dough) {
       return "dough__input--" + (dough.name == "Тонкое" ? "light" : "large");

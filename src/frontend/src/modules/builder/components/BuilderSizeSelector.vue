@@ -4,25 +4,24 @@
       <h2 class="title title--small sheet__title">Выберите размер</h2>
 
       <div class="sheet__content diameter">
-        <label
-          class="diameter__input"
-          :class="'diameter__input--' + getPizzaSize(size)"
-          v-for="(size, key) in sizes"
-          :key="'size-' + key"
+        <radio-button
+          v-for="size in sizes"
+          :key="'size-' + size.id"
+          :class="['diameter__input', 'diameter__input--' + getPizzaSize(size)]"
+          :radioBtnClass="['visually-hidden']"
+          :radioBtnValue="size.multiplier"
+          radioBtnName="diametr"
         >
-          <input
-            type="radio"
-            name="diameter"
-            :value="size.multiplier"
-            class="visually-hidden"
-          />
-          <span>{{ size.name }}</span>
-        </label>
+          <template v-slot>
+            <span>{{ size.name }}</span>
+          </template>
+        </radio-button>
       </div>
     </div>
   </div>
 </template>
 <script>
+import RadioButton from "@/common/components/RadioButton.vue";
 export default {
   name: "SizeSelector",
   props: {
@@ -31,6 +30,7 @@ export default {
       required: true,
     },
   },
+  components: { RadioButton },
   methods: {
     getPizzaSize(size) {
       switch (size.multiplier) {

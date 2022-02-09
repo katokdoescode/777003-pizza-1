@@ -6,15 +6,17 @@
       <div class="sheet__content ingredients">
         <div class="ingredients__sauce">
           <p>Основной соус:</p>
-
-          <label
-            class="radio ingredients__input"
-            v-for="(sauce, key) in sauces"
-            :key="'sauce-' + key"
+          <radio-button
+            v-for="sauce in sauces"
+            :key="'sauce-' + sauce.id"
+            :class="['radio', 'ingredients__input']"
+            radioBtnName="sauce"
+            :radioBtnValue="sauce.name"
           >
-            <input type="radio" name="sauce" :value="sauce.name" />
-            <span>{{ sauce.name }}</span>
-          </label>
+            <template v-slot>
+              <span>{{ sauce.name }}</span>
+            </template>
+          </radio-button>
         </div>
 
         <div class="ingredients__filling">
@@ -49,6 +51,7 @@
 </template>
 <script>
 import ItemCounter from "@/common/components/ItemCounter.vue";
+import RadioButton from "@/common/components/RadioButton.vue";
 export default {
   name: "IngredientsSelector",
   data() {
@@ -68,6 +71,7 @@ export default {
   },
   components: {
     ItemCounter,
+    RadioButton,
   },
   methods: {
     getIngredientClass(ingredient) {
