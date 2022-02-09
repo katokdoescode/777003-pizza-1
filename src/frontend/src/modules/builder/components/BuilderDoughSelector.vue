@@ -44,6 +44,7 @@ export default {
     },
     updateSelectedDoughPrice(price) {
       this.selectedDoughPrice = price;
+      this.$emit("doughSelected", this.selectedDoughPrice);
     },
   },
 };

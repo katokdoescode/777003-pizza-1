@@ -52,6 +52,7 @@ export default {
     },
     updateSelectedSize(size) {
       this.selectedSizeMultiplier = size;
+      this.$emit("sizeSelected", this.selectedSizeMultiplier);
     },
   },
 };

@@ -75,6 +75,14 @@ export default {
     ItemCounter,
     RadioButton,
   },
+  watch: {
+    ingredientsCount: {
+      deep: true,
+      handler(value) {
+        this.$emit("ingredientsChanged", value);
+      },
+    },
+  },
   methods: {
     getIngredientClass(ingredient) {
       const imagePath = ingredient.image.split("/");
@@ -100,6 +108,7 @@ export default {
     },
     updateSelectedSauce(price) {
       this.selectedSaucePrice = price;
+      this.$emit("sauceSelected", this.selectedSaucePrice);
     },
   },
 };

@@ -4,17 +4,27 @@
       <div class="content__wrapper">
         <h1 class="title title--big">Конструктор пиццы</h1>
 
-        <builder-dough-selector :dough="pizza.dough" />
+        <builder-dough-selector
+          :dough="pizza.dough"
+          @doughSelected="selectedPizzaParameters.doughPrice = $event"
+        />
 
-        <builder-size-selector :sizes="pizza.sizes" />
+        <builder-size-selector
+          :sizes="pizza.sizes"
+          @sizeSelected="selectedPizzaParameters.sizeMultiplier = $event"
+        />
 
         <builder-ingredients-selector
           :ingredients="pizza.ingredients"
           :sauces="pizza.sauces"
+          @ingredientsChanged="
+            selectedPizzaParameters.selectedIngredients = $event
+          "
+          @sauceSelected="selectedPizzaParameters.saucePrice = $event"
         />
 
         <builder-pizza-view>
-          <builder-price-counter />
+          <builder-price-counter :price="totalPrice" />
         </builder-pizza-view>
       </div>
     </form>
@@ -45,7 +55,19 @@ export default {
       misc,
       pizza,
       user,
+      selectedPizzaParameters: {
+        saucePrice: null,
+        doughPrice: null,
+        selectedIngredients: null,
+        sizeMultiplier: null,
+      },
     };
+  },
+  computed: {
+    totalPrice() {
+      let total = 0;
+      return total;
+    },
   },
 };
 </script>
