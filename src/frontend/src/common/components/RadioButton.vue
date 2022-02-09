@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     selectValue(e) {
-      this.$emit("selectValue", e.target.value);
+      this.$emit("selectValue", Number(e.target.value));
     },
   },
 };
