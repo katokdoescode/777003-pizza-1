@@ -8,8 +8,10 @@
         placeholder="Введите название пиццы"
       />
     </label>
-
-    <div class="content__constructor">
+    <drop-area
+      class="content__constructor"
+      @drop="$emit('droppedItem', $event.id)"
+    >
       <div class="pizza pizza--foundation--big-tomato">
         <div class="pizza__wrapper">
           <div class="pizza__filling pizza__filling--ananas"></div>
@@ -17,13 +19,15 @@
           <div class="pizza__filling pizza__filling--cheddar"></div>
         </div>
       </div>
-    </div>
+    </drop-area>
     <slot />
   </div>
 </template>
 <script>
+import DropArea from "@/common/components/DropArea.vue";
 export default {
   name: "PizzaView",
+  components: { DropArea },
 };
 </script>
 <style></style>
