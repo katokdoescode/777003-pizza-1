@@ -35,10 +35,11 @@
               <item-counter
                 :count="
                   ingredientsCount[ingredient.id]
-                    ? ingredientsCount[ingredient.id]
+                    ? ingredientsCount[ingredient.id].count
                     : 0
                 "
                 :id="ingredient.id"
+                :price="ingredient.price"
                 @counterPlus="addIngredient(ingredient.id)"
                 @counterMinus="removeIngredient(ingredient.id)"
                 @changeCount="changeIngredientCount"
@@ -89,21 +90,30 @@ export default {
       return imagePath[3] + "--" + imagePath[4].slice(0, -4);
     },
     changeIngredientCount(data) {
-      this.$set(this.ingredientsCount, data.id, data.value);
+      this.$set(this.ingredientsCount, data.id, {
+        price: data.price,
+        count: data.value,
+      });
     },
     // Есть смысл обернуть эти два метода в один, и передавать просто дополнительынй параметр?
     addIngredient(ingredientId) {
       if (this.ingredientsCount[ingredientId]) {
-        this.ingredientsCount[ingredientId]++;
+        this.ingredientsCount[ingredientId].count++;
       } else {
-        this.$set(this.ingredientsCount, ingredientId, 1);
+        this.$set(this.ingredientsCount, ingredientId, {
+          price: this.ingredients[ingredientId].price,
+          count: 1,
+        });
       }
     },
     removeIngredient(ingredientId) {
       if (this.ingredientsCount[ingredientId]) {
-        this.ingredientsCount[ingredientId]--;
+        this.ingredientsCount[ingredientId].count--;
       } else {
-        this.$set(this.ingredientsCount, ingredientId, 0);
+        this.$set(this.ingredientsCount, ingredientId, {
+          price: this.ingredients[ingredientId].price,
+          count: 0,
+        });
       }
     },
     updateSelectedSauce(price) {
