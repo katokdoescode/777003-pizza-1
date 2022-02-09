@@ -17,13 +17,14 @@
         <builder-ingredients-selector
           :ingredients="pizza.ingredients"
           :sauces="pizza.sauces"
-          @ingredientsChanged="
-            selectedPizzaParameters.selectedIngredients = $event
-          "
+          :ingredientsCount="selectedPizzaParameters.selectedIngredients"
           @sauceSelected="selectedPizzaParameters.saucePrice = $event"
+          @changeIngredientCount="changeIngredientCount"
+          @addIngredient="addIngredient"
+          @removeIngredient="removeIngredient"
         />
 
-        <builder-pizza-view>
+        <builder-pizza-view @droppedItem="addIngredient">
           <builder-price-counter :price="totalPrice" />
         </builder-pizza-view>
       </div>
@@ -79,6 +80,43 @@ export default {
       return this.selectedPizzaParameters.sizeMultiplier != 0
         ? total * this.selectedPizzaParameters.sizeMultiplier
         : total;
+    },
+  },
+  // Перенес методы для посчета ингредиентов из компонента билдера в основной компонент
+  methods: {
+    changeIngredientCount(data) {
+      this.$set(this.selectedPizzaParameters.selectedIngredients, data.id, {
+        price: data.price,
+        count: data.value,
+      });
+    },
+    addIngredient(ingredientId) {
+      if (this.selectedPizzaParameters.selectedIngredients[ingredientId]) {
+        this.selectedPizzaParameters.selectedIngredients[ingredientId].count++;
+      } else {
+        this.$set(
+          this.selectedPizzaParameters.selectedIngredients,
+          ingredientId,
+          {
+            price: this.pizza.ingredients[ingredientId - 1].price,
+            count: 1,
+          }
+        );
+      }
+    },
+    removeIngredient(ingredientId) {
+      if (this.selectedPizzaParameters.selectedIngredients[ingredientId]) {
+        this.selectedPizzaParameters.selectedIngredients[ingredientId].count--;
+      } else {
+        this.$set(
+          this.selectedPizzaParameters.selectedIngredients,
+          ingredientId,
+          {
+            price: this.pizza.ingredients[ingredientId - 1].price,
+            count: 0,
+          }
+        );
+      }
     },
   },
 };

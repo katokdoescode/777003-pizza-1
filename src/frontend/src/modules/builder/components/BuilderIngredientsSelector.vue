@@ -29,9 +29,11 @@
               v-for="ingredient in ingredients"
               :key="'ingredient-' + ingredient.id"
             >
-              <span class="filling" :class="getIngredientClass(ingredient)">
-                {{ ingredient.name }}
-              </span>
+              <drag-wrapper :transfer-data="ingredient">
+                <span class="filling" :class="getIngredientClass(ingredient)">
+                  {{ ingredient.name }}
+                </span>
+              </drag-wrapper>
               <item-counter
                 :count="
                   ingredientsCount[ingredient.id]
@@ -40,9 +42,9 @@
                 "
                 :id="ingredient.id"
                 :price="ingredient.price"
-                @counterPlus="addIngredient(ingredient.id)"
-                @counterMinus="removeIngredient(ingredient.id)"
-                @changeCount="changeIngredientCount"
+                @counterPlus="$emit('addIngredient', ingredient.id)"
+                @counterMinus="$emit('removeIngredient', ingredient.id)"
+                @changeCount="$emit('changeIngredientCount')"
               />
             </li>
           </ul>
@@ -54,11 +56,11 @@
 <script>
 import ItemCounter from "@/common/components/ItemCounter.vue";
 import RadioButton from "@/common/components/RadioButton.vue";
+import DragWrapper from "@/common/components/DragWrapper.vue";
 export default {
   name: "IngredientsSelector",
   data() {
     return {
-      ingredientsCount: {},
       selectedSaucePrice: null,
     };
   },
@@ -66,6 +68,10 @@ export default {
     ingredients: {
       type: Array,
       required: true,
+    },
+    ingredientsCount: {
+      type: Object,
+      required: false,
     },
     sauces: {
       type: Array,
@@ -75,46 +81,12 @@ export default {
   components: {
     ItemCounter,
     RadioButton,
-  },
-  watch: {
-    ingredientsCount: {
-      deep: true,
-      handler(value) {
-        this.$emit("ingredientsChanged", value);
-      },
-    },
+    DragWrapper,
   },
   methods: {
     getIngredientClass(ingredient) {
       const imagePath = ingredient.image.split("/");
       return imagePath[3] + "--" + imagePath[4].slice(0, -4);
-    },
-    changeIngredientCount(data) {
-      this.$set(this.ingredientsCount, data.id, {
-        price: data.price,
-        count: data.value,
-      });
-    },
-    // Есть смысл обернуть эти два метода в один, и передавать просто дополнительынй параметр?
-    addIngredient(ingredientId) {
-      if (this.ingredientsCount[ingredientId]) {
-        this.ingredientsCount[ingredientId].count++;
-      } else {
-        this.$set(this.ingredientsCount, ingredientId, {
-          price: this.ingredients[ingredientId].price,
-          count: 1,
-        });
-      }
-    },
-    removeIngredient(ingredientId) {
-      if (this.ingredientsCount[ingredientId]) {
-        this.ingredientsCount[ingredientId].count--;
-      } else {
-        this.$set(this.ingredientsCount, ingredientId, {
-          price: this.ingredients[ingredientId].price,
-          count: 0,
-        });
-      }
     },
     updateSelectedSauce(price) {
       this.selectedSaucePrice = price;
