@@ -5,6 +5,7 @@
       :name="radioBtnName"
       :value="radioBtnValue"
       :class="radioBtnClass"
+      @input="selectValue"
     />
     <slot></slot>
   </label>
@@ -24,6 +25,11 @@ export default {
     radioBtnValue: {
       type: [String, Number],
       required: true,
+    },
+  },
+  methods: {
+    selectValue(e) {
+      this.$emit("selectValue", e.target.value);
     },
   },
 };

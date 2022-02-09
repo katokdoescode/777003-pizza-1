@@ -7,10 +7,11 @@
         <radio-button
           v-for="doughItem in dough"
           :key="'dough-' + doughItem.id"
-          :radioBtnValue="doughItem.name"
+          :radioBtnValue="doughItem.price"
           :class="['dough__input', getDoughSize(dough)]"
           :radioBtnClass="['visually-hidden']"
           radioBtnName="dought"
+          @selectValue="updateSelectedDoughPrice"
         >
           <template v-slot>
             <b>{{ doughItem.name }}</b>
@@ -25,6 +26,11 @@
 import RadioButton from "@/common/components/RadioButton.vue";
 export default {
   name: "DoughSelector",
+  data() {
+    return {
+      selectedDoughPrice: null,
+    };
+  },
   props: {
     dough: {
       type: Array,
@@ -35,6 +41,9 @@ export default {
   methods: {
     getDoughSize(dough) {
       return "dough__input--" + (dough.name == "Тонкое" ? "light" : "large");
+    },
+    updateSelectedDoughPrice(price) {
+      this.selectedDoughPrice = price;
     },
   },
 };

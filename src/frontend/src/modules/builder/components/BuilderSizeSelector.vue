@@ -11,6 +11,7 @@
           :radioBtnClass="['visually-hidden']"
           :radioBtnValue="size.multiplier"
           radioBtnName="diametr"
+          @selectValue="updateSelectedSize"
         >
           <template v-slot>
             <span>{{ size.name }}</span>
@@ -24,6 +25,11 @@
 import RadioButton from "@/common/components/RadioButton.vue";
 export default {
   name: "SizeSelector",
+  data() {
+    return {
+      selectedSizeMultiplier: null,
+    };
+  },
   props: {
     sizes: {
       type: Array,
@@ -43,6 +49,9 @@ export default {
         default:
           break;
       }
+    },
+    updateSelectedSize(size) {
+      this.selectedSizeMultiplier = size;
     },
   },
 };

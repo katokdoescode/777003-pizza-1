@@ -11,7 +11,8 @@
             :key="'sauce-' + sauce.id"
             :class="['radio', 'ingredients__input']"
             radioBtnName="sauce"
-            :radioBtnValue="sauce.name"
+            :radioBtnValue="sauce.price"
+            @selectValue="updateSelectedSauce"
           >
             <template v-slot>
               <span>{{ sauce.name }}</span>
@@ -57,6 +58,7 @@ export default {
   data() {
     return {
       ingredientsCount: {},
+      selectedSaucePrice: null,
     };
   },
   props: {
@@ -95,6 +97,9 @@ export default {
       } else {
         this.$set(this.ingredientsCount, ingredientId, 0);
       }
+    },
+    updateSelectedSauce(price) {
+      this.selectedSaucePrice = price;
     },
   },
 };
