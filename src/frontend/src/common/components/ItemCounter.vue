@@ -36,6 +36,10 @@ export default {
       type: Number,
       required: true,
     },
+    price: {
+      type: Number,
+      default: 0,
+    },
   },
   methods: {
     counterPlus() {
@@ -45,7 +49,11 @@ export default {
       this.$emit("counterMinus");
     },
     changeCount(e) {
-      this.$emit("changeCount", { value: Number(e.target.value), id: this.id });
+      this.$emit("changeCount", {
+        value: Number(e.target.value),
+        id: this.id,
+        price: Number(this.price),
+      });
     },
   },
 };
