@@ -27,6 +27,7 @@
           <builder-price-counter :price="totalPrice" />
         </builder-pizza-view>
       </div>
+      {{ selectedPizzaParameters }}
     </form>
   </main>
 </template>
@@ -56,17 +57,22 @@ export default {
       pizza,
       user,
       selectedPizzaParameters: {
-        saucePrice: null,
-        doughPrice: null,
-        selectedIngredients: null,
-        sizeMultiplier: null,
+        saucePrice: 0,
+        doughPrice: 0,
+        selectedIngredients: 0,
+        sizeMultiplier: 0,
       },
     };
   },
   computed: {
     totalPrice() {
       let total = 0;
-      return total;
+      total =
+        this.selectedPizzaParameters.saucePrice +
+        this.selectedPizzaParameters.doughPrice;
+      return this.selectedPizzaParameters.sizeMultiplier != 0
+        ? total * this.selectedPizzaParameters.sizeMultiplier
+        : total;
     },
   },
 };
