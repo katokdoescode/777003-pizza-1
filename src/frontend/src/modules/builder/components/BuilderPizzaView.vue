@@ -38,6 +38,7 @@ export default {
     },
   },
   computed: {
+    // Чтобы на пиццу попадали только игредиенты с количеством отличным от нуля
     onlyCountedIngredients() {
       const ingredients = Object.values(this.ingredients);
       return ingredients.filter((ingredient) => ingredient.count != 0);

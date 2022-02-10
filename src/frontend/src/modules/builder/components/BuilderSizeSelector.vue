@@ -50,6 +50,7 @@ export default {
           break;
       }
     },
+    // Сохраняю и передаю выше выбранный размер пиццы
     updateSelectedSize(size) {
       this.selectedSizeMultiplier = size;
       this.$emit("sizeSelected", this.selectedSizeMultiplier);

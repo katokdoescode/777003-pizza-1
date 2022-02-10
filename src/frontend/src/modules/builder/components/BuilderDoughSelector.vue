@@ -42,6 +42,7 @@ export default {
     getDoughSize(dough) {
       return "dough__input--" + (dough.name == "Тонкое" ? "light" : "large");
     },
+    // Сохраняю и передаю выше цену выбранного теста
     updateSelectedDoughPrice(price) {
       this.selectedDoughPrice = price;
       this.$emit("doughSelected", this.selectedDoughPrice);

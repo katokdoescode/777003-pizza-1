@@ -36,8 +36,8 @@
               </drag-wrapper>
               <item-counter
                 :count="
-                  ingredientsCount[ingredient.id]
-                    ? ingredientsCount[ingredient.id].count
+                  selectedIngredients[ingredient.id]
+                    ? selectedIngredients[ingredient.id].count
                     : 0
                 "
                 :item="ingredient"
@@ -68,7 +68,7 @@ export default {
       type: Array,
       required: true,
     },
-    ingredientsCount: {
+    selectedIngredients: {
       type: Object,
       required: false,
     },
@@ -87,6 +87,7 @@ export default {
       const imagePath = ingredient.image.split("/");
       return imagePath[3] + "--" + imagePath[4].slice(0, -4);
     },
+    // Сохраняю и передаю в родительский компонент цену выбранного соуса
     updateSelectedSauce(price) {
       this.selectedSaucePrice = price;
       this.$emit("sauceSelected", this.selectedSaucePrice);

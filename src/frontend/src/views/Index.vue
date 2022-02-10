@@ -17,7 +17,7 @@
         <builder-ingredients-selector
           :ingredients="pizza.ingredients"
           :sauces="pizza.sauces"
-          :ingredientsCount="selectedPizzaParameters.selectedIngredients"
+          :selectedIngredients="selectedPizzaParameters.selectedIngredients"
           @sauceSelected="selectedPizzaParameters.saucePrice = $event"
           @changeIngredientCount="changeIngredientCount"
           @addIngredient="addIngredient"
@@ -88,6 +88,7 @@ export default {
   },
   // Перенес методы для посчета ингредиентов из компонента билдера в основной компонент
   methods: {
+    // Изменение количества ингредиентов через input text
     changeIngredientCount(data) {
       this.$set(this.selectedPizzaParameters.selectedIngredients, data.id, {
         price: data.price,
@@ -95,6 +96,7 @@ export default {
         image: data.image,
       });
     },
+    // Добавление ингредиента по одному через button и drag'n'drop
     addIngredient(ingredientId) {
       if (this.selectedPizzaParameters.selectedIngredients[ingredientId]) {
         this.selectedPizzaParameters.selectedIngredients[ingredientId].count++;
@@ -110,6 +112,7 @@ export default {
         );
       }
     },
+    // Убавление ингредиента по одному через button
     removeIngredient(ingredientId) {
       if (this.selectedPizzaParameters.selectedIngredients[ingredientId]) {
         this.selectedPizzaParameters.selectedIngredients[ingredientId].count--;
