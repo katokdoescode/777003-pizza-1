@@ -14,9 +14,12 @@
     >
       <div class="pizza pizza--foundation--big-tomato">
         <div class="pizza__wrapper">
-          <div class="pizza__filling pizza__filling--ananas"></div>
-          <div class="pizza__filling pizza__filling--bacon"></div>
-          <div class="pizza__filling pizza__filling--cheddar"></div>
+          <div
+            class="pizza__filling"
+            v-for="ingredient in onlyCountedIngredients"
+            :key="'on-pizza-ingredient-' + getIngredientName(ingredient)"
+            :class="'pizza__filling--' + getIngredientName(ingredient)"
+          ></div>
         </div>
       </div>
     </drop-area>
@@ -28,6 +31,24 @@ import DropArea from "@/common/components/DropArea.vue";
 export default {
   name: "PizzaView",
   components: { DropArea },
+  props: {
+    ingredients: {
+      type: Object,
+      required: false,
+    },
+  },
+  computed: {
+    onlyCountedIngredients() {
+      const ingredients = Object.values(this.ingredients);
+      return ingredients.filter((ingredient) => ingredient.count != 0);
+    },
+  },
+  methods: {
+    getIngredientName(ingredient) {
+      const imagePath = ingredient.image.split("/");
+      return imagePath[4].slice(0, -4);
+    },
+  },
 };
 </script>
 <style></style>

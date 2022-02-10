@@ -40,11 +40,10 @@
                     ? ingredientsCount[ingredient.id].count
                     : 0
                 "
-                :id="ingredient.id"
-                :price="ingredient.price"
+                :item="ingredient"
                 @counterPlus="$emit('addIngredient', ingredient.id)"
                 @counterMinus="$emit('removeIngredient', ingredient.id)"
-                @changeCount="$emit('changeIngredientCount')"
+                @changeCount="$emit('changeIngredientCount', $event)"
               />
             </li>
           </ul>

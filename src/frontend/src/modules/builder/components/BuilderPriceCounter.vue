@@ -1,7 +1,9 @@
 <template>
   <div class="content__result">
     <p>Итого: {{ price }} ₽</p>
-    <button type="button" class="button" disabled>Готовьте!</button>
+    <button type="button" class="button" :disabled="price <= 0">
+      Готовьте!
+    </button>
   </div>
 </template>
 <script>

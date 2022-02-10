@@ -32,13 +32,9 @@ export default {
       type: Number,
       default: 0,
     },
-    id: {
-      type: Number,
+    item: {
+      type: Object,
       required: true,
-    },
-    price: {
-      type: Number,
-      default: 0,
     },
   },
   methods: {
@@ -51,8 +47,9 @@ export default {
     changeCount(e) {
       this.$emit("changeCount", {
         value: Number(e.target.value),
-        id: this.id,
-        price: Number(this.price),
+        id: this.item.id,
+        price: Number(this.item.price),
+        image: this.item.image,
       });
     },
   },

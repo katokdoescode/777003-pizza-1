@@ -24,7 +24,10 @@
           @removeIngredient="removeIngredient"
         />
 
-        <builder-pizza-view @droppedItem="addIngredient">
+        <builder-pizza-view
+          @droppedItem="addIngredient"
+          :ingredients="selectedPizzaParameters.selectedIngredients"
+        >
           <builder-price-counter :price="totalPrice" />
         </builder-pizza-view>
       </div>
@@ -65,6 +68,7 @@ export default {
     };
   },
   computed: {
+    // Считаю итоговую цену, учитывая все параметры пиццы
     totalPrice() {
       let total = 0;
       total =
@@ -88,6 +92,7 @@ export default {
       this.$set(this.selectedPizzaParameters.selectedIngredients, data.id, {
         price: data.price,
         count: data.value,
+        image: data.image,
       });
     },
     addIngredient(ingredientId) {
@@ -100,6 +105,7 @@ export default {
           {
             price: this.pizza.ingredients[ingredientId - 1].price,
             count: 1,
+            image: this.pizza.ingredients[ingredientId - 1].image,
           }
         );
       }
@@ -114,6 +120,7 @@ export default {
           {
             price: this.pizza.ingredients[ingredientId - 1].price,
             count: 0,
+            image: this.pizza.ingredients[ingredientId - 1].image,
           }
         );
       }
