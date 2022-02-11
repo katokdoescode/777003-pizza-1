@@ -35,12 +35,8 @@
                 </span>
               </drag-wrapper>
               <item-counter
-                :count="
-                  selectedIngredients[ingredient.id]
-                    ? selectedIngredients[ingredient.id].count
-                    : 0
-                "
                 :item="ingredient"
+                :count="ingredientCount(ingredient)"
                 @counterPlus="$emit('addIngredient', ingredient.id)"
                 @counterMinus="$emit('removeIngredient', ingredient.id)"
                 @changeCount="$emit('changeIngredientCount', $event)"
@@ -83,6 +79,11 @@ export default {
     DragWrapper,
   },
   methods: {
+    ingredientCount(ingredient) {
+      return this.selectedIngredients[ingredient.id]
+        ? this.selectedIngredients[ingredient.id].count
+        : 0;
+    },
     getIngredientClass(ingredient) {
       const imagePath = ingredient.image.split("/");
       return imagePath[3] + "--" + imagePath[4].slice(0, -4);
