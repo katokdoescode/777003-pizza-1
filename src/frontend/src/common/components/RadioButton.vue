@@ -2,9 +2,9 @@
   <label>
     <input
       type="radio"
-      :name="radioBtnName"
-      :value="radioBtnValue"
-      :class="radioBtnClass"
+      :name="name"
+      :value="value"
+      :class="[{ 'visually-hidden': hidden }]"
       @input="selectValue"
     />
     <slot></slot>
@@ -14,15 +14,15 @@
 export default {
   name: "RadioButton",
   props: {
-    radioBtnClass: {
-      type: Array,
-      required: false,
+    hidden: {
+      type: Boolean,
+      default: false,
     },
-    radioBtnName: {
+    name: {
       type: String,
       required: true,
     },
-    radioBtnValue: {
+    value: {
       type: [String, Number],
       required: true,
     },
