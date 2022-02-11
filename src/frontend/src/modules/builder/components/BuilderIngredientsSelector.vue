@@ -10,13 +10,11 @@
             v-for="sauce in sauces"
             :key="'sauce-' + sauce.id"
             :class="['radio', 'ingredients__input']"
-            radioBtnName="sauce"
-            :radioBtnValue="sauce.price"
+            name="sauce"
+            :value="sauce.price"
             @selectValue="updateSelectedSauce"
           >
-            <template v-slot>
-              <span>{{ sauce.name }}</span>
-            </template>
+            <span>{{ sauce.name }}</span>
           </radio-button>
         </div>
 
@@ -54,11 +52,6 @@ import RadioButton from "@/common/components/RadioButton.vue";
 import DragWrapper from "@/common/components/DragWrapper.vue";
 export default {
   name: "IngredientsSelector",
-  data() {
-    return {
-      selectedSaucePrice: null,
-    };
-  },
   props: {
     ingredients: {
       type: Array,
@@ -88,10 +81,9 @@ export default {
       const imagePath = ingredient.image.split("/");
       return imagePath[3] + "--" + imagePath[4].slice(0, -4);
     },
-    // Сохраняю и передаю в родительский компонент цену выбранного соуса
+    // Передаю в родительский компонент цену выбранного соуса
     updateSelectedSauce(price) {
-      this.selectedSaucePrice = price;
-      this.$emit("sauceSelected", this.selectedSaucePrice);
+      this.$emit("sauceSelected", price);
     },
   },
 };

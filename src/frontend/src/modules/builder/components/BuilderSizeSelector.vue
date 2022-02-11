@@ -8,14 +8,12 @@
           v-for="size in sizes"
           :key="'size-' + size.id"
           :class="['diameter__input', 'diameter__input--' + getPizzaSize(size)]"
-          :radioBtnClass="['visually-hidden']"
-          :radioBtnValue="size.multiplier"
-          radioBtnName="diametr"
+          hidden
+          :value="size.multiplier"
+          name="diametr"
           @selectValue="updateSelectedSize"
         >
-          <template v-slot>
-            <span>{{ size.name }}</span>
-          </template>
+          <span>{{ size.name }}</span>
         </radio-button>
       </div>
     </div>
@@ -25,11 +23,6 @@
 import RadioButton from "@/common/components/RadioButton.vue";
 export default {
   name: "SizeSelector",
-  data() {
-    return {
-      selectedSizeMultiplier: null,
-    };
-  },
   props: {
     sizes: {
       type: Array,
@@ -50,10 +43,9 @@ export default {
           break;
       }
     },
-    // Сохраняю и передаю выше выбранный размер пиццы
+    // Передаю выше выбранный размер пиццы
     updateSelectedSize(size) {
-      this.selectedSizeMultiplier = size;
-      this.$emit("sizeSelected", this.selectedSizeMultiplier);
+      this.$emit("sizeSelected", size);
     },
   },
 };
