@@ -35,9 +35,9 @@
               <item-counter
                 :item="ingredient"
                 :count="ingredientCount(ingredient)"
-                @counterPlus="$emit('addIngredient', ingredient.id)"
-                @counterMinus="$emit('removeIngredient', ingredient.id)"
-                @changeCount="$emit('changeIngredientCount', $event)"
+                @changeCount="
+                  $emit('changeIngredientCount', $event, ingredient.id)
+                "
               />
             </li>
           </ul>
