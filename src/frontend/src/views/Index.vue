@@ -15,7 +15,7 @@
         />
 
         <builder-ingredients-selector
-          :ingredients="pizza.ingredients"
+          :ingredients="order.selectedIngredients"
           :sauces="pizza.sauces"
           :selectedIngredients="order.selectedIngredients"
           @sauceSelected="order.saucePrice = $event"
@@ -60,7 +60,7 @@ export default {
       order: {
         saucePrice: 0,
         doughPrice: 0,
-        selectedIngredients: {},
+        selectedIngredients: [],
         sizeMultiplier: 0,
       },
     };
@@ -70,8 +70,8 @@ export default {
     totalPrice() {
       let total = 0;
       total = this.order.saucePrice + this.order.doughPrice;
-      if (this.order.selectedIngredients) {
-        Object.values(this.order.selectedIngredients).forEach((ingredient) => {
+      if (this.order.selectedIngredients.length > 0) {
+        this.order.selectedIngredients.forEach((ingredient) => {
           total += ingredient.price * ingredient.count;
         });
       }
@@ -80,51 +80,34 @@ export default {
         : total;
     },
   },
-  // Перенес методы для посчета ингредиентов из компонента билдера в основной компонент
   methods: {
-    // Изменение количества ингредиентов через input text
+    // Изменение количества ингредиентов по любому виду ввода
     changeIngredientCount(data, id) {
-      console.log(data, id);
-      if (data === true) {
-        if (this.order.selectedIngredients.id === id) {
-          this.order.selectedIngredients.filter(
-            (ingredient) => ingredient.id === id
-          ).count++;
-        } else {
-          this.$set(this.order.selectedIngredients, id, {
-            price: this.pizza.ingredients.filter(
-              (ingredient) => ingredient.id === id
-            )[0].price,
-            count: 1,
-            image: this.pizza.ingredients.filter(
-              (ingredient) => ingredient.id === id
-            )[0].image,
-          });
+      this.order.selectedIngredients.forEach((ingredient) => {
+        if (typeof data === "boolean") {
+          if (ingredient.id === id && data === true)
+            ingredient.count != 3 ? ingredient.count++ : false;
+          if (ingredient.id === id && data === false)
+            ingredient.count != 0 ? ingredient.count-- : false;
+        } else if (typeof data === "object") {
+          // BUG: Input не обновляется если число больше 30, но данные сохраняются верно
+          if (ingredient.id === id)
+            ingredient.count =
+              data.count > 3 || data.count < 0 ? 3 : data.count;
         }
-      } else if (data === false) {
-        if (this.order.selectedIngredients.id === id) {
-          this.order.selectedIngredients.filter(
-            (ingredient) => ingredient.id === id
-          ).count--;
-        } else {
-          this.$set(this.order.selectedIngredients, id, {
-            price: this.pizza.ingredients.filter(
-              (ingredient) => ingredient.id === id
-            )[0].price,
-            count: 0,
-            image: this.pizza.ingredients.filter(
-              (ingredient) => ingredient.id === id
-            )[0].image,
-          });
-        }
-      } else {
-        this.$set(this.order.selectedIngredients, id, {
-          price: data.price,
-          count: data.value,
-          image: data.image,
-        });
-      }
+      });
     },
+  },
+  mounted() {
+    // Буду считать количество каждого ингредиента в общем массиве
+    this.order.selectedIngredients = this.pizza.ingredients.map(
+      (ingredient) => {
+        return {
+          ...ingredient,
+          count: 0,
+        };
+      }
+    );
   },
 };
 </script>

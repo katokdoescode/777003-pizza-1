@@ -47,7 +47,7 @@ export default {
       } else {
         this.$emit("changeCount", {
           id: this.item.id,
-          value: Number(e.target.value),
+          count: Number(e.target.value),
           price: Number(this.item.price),
           image: this.item.image,
         });

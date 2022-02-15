@@ -33,7 +33,7 @@ export default {
   components: { DropArea },
   props: {
     ingredients: {
-      type: Object,
+      type: [Array, Object],
       required: false,
     },
   },
