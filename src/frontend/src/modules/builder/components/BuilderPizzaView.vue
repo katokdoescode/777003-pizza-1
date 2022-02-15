@@ -53,14 +53,14 @@ export default {
     // Чтобы на пиццу попадали только игредиенты с количеством отличным от нуля
     onlyCountedIngredients() {
       const ingredients = Object.values(this.ingredients);
-      return ingredients.filter((ingredient) => ingredient.count != 0);
+      return ingredients.filter((ingredient) => ingredient.count !== 0);
     },
     pizzaClass() {
       let baseClass =
         "pizza--foundation--" +
-        (this.dough.name == "Тонкое" ? "small" : "big") +
+        (this.dough.name === "Тонкое" ? "small" : "big") +
         "-" +
-        (this.sauce.name == "Томатный" ? "tomato" : "creamy");
+        (this.sauce.name === "Томатный" ? "tomato" : "creamy");
       return baseClass;
     },
   },

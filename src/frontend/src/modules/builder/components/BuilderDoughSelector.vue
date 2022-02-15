@@ -10,7 +10,7 @@
           :value="doughItem.price"
           :class="['dough__input', getDoughSize(dough)]"
           hidden
-          :checked="doughItem == selectedDough"
+          :checked="doughItem === selectedDough"
           name="dought"
           @selectValue="updateSelectedDoughPrice(doughItem)"
         >
@@ -38,7 +38,7 @@ export default {
   components: { RadioButton },
   methods: {
     getDoughSize(dough) {
-      return "dough__input--" + (dough.name == "Тонкое" ? "light" : "large");
+      return "dough__input--" + (dough.name === "Тонкое" ? "light" : "large");
     },
     updateSelectedDoughPrice(price) {
       this.$emit("doughSelected", price);

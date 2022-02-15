@@ -11,7 +11,7 @@
             :key="'sauce-' + sauce.id"
             :class="['radio', 'ingredients__input']"
             name="sauce"
-            :checked="sauce == selectedSauce"
+            :checked="sauce === selectedSauce"
             :value="sauce.price"
             @selectValue="updateSelectedSauce(sauce)"
           >

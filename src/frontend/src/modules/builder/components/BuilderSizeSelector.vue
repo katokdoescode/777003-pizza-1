@@ -11,7 +11,7 @@
           hidden
           :value="size.multiplier"
           name="diametr"
-          :checked="size == selectedSize"
+          :checked="size === selectedSize"
           @selectValue="updateSelectedSize(size)"
         >
           <span>{{ size.name }}</span>
