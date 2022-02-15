@@ -6,27 +6,31 @@
 
         <builder-dough-selector
           :dough="pizza.dough"
-          @doughSelected="selectedPizzaParameters.doughPrice = $event"
+          :selectedDough="order.dough"
+          @doughSelected="order.dough = $event"
         />
 
         <builder-size-selector
           :sizes="pizza.sizes"
-          @sizeSelected="selectedPizzaParameters.sizeMultiplier = $event"
+          :selectedSize="order.size"
+          @sizeSelected="order.size = $event"
         />
 
         <builder-ingredients-selector
-          :ingredients="pizza.ingredients"
+          :ingredients="order.selectedIngredients"
           :sauces="pizza.sauces"
-          :selectedIngredients="selectedPizzaParameters.selectedIngredients"
-          @sauceSelected="selectedPizzaParameters.saucePrice = $event"
+          :selectedIngredients="order.selectedIngredients"
+          :selectedSauce="order.sauce"
+          @sauceSelected="order.sauce = $event"
           @changeIngredientCount="changeIngredientCount"
-          @addIngredient="addIngredient"
-          @removeIngredient="removeIngredient"
         />
 
         <builder-pizza-view
-          @droppedItem="addIngredient"
-          :ingredients="selectedPizzaParameters.selectedIngredients"
+          @droppedItem="changeIngredientCount(true, $event)"
+          :ingredients="order.selectedIngredients"
+          :sauce="order.sauce"
+          :size="order.size"
+          :dough="order.dough"
         >
           <builder-price-counter :price="totalPrice" />
         </builder-pizza-view>
@@ -59,11 +63,11 @@ export default {
       misc,
       pizza,
       user,
-      selectedPizzaParameters: {
-        saucePrice: 0,
-        doughPrice: 0,
-        selectedIngredients: {},
-        sizeMultiplier: 0,
+      order: {
+        selectedIngredients: [],
+        size: {},
+        dough: {},
+        sauce: {},
       },
     };
   },
@@ -71,63 +75,48 @@ export default {
     // Считаю итоговую цену, учитывая все параметры пиццы
     totalPrice() {
       let total = 0;
-      total =
-        this.selectedPizzaParameters.saucePrice +
-        this.selectedPizzaParameters.doughPrice;
-      if (this.selectedPizzaParameters.selectedIngredients) {
-        Object.values(this.selectedPizzaParameters.selectedIngredients).forEach(
-          (ingredient) => {
-            total += ingredient.price * ingredient.count;
-          }
-        );
+      total = this.order.sauce.price + this.order.dough.price;
+      if (this.order.selectedIngredients.length > 0) {
+        this.order.selectedIngredients.forEach((ingredient) => {
+          total += ingredient.price * ingredient.count;
+        });
       }
-      return this.selectedPizzaParameters.sizeMultiplier != 0
-        ? total * this.selectedPizzaParameters.sizeMultiplier
+      return this.order.size.multiplier != 0
+        ? total * this.order.size.multiplier
         : total;
     },
   },
-  // Перенес методы для посчета ингредиентов из компонента билдера в основной компонент
   methods: {
-    // Изменение количества ингредиентов через input text
-    changeIngredientCount(data) {
-      this.$set(this.selectedPizzaParameters.selectedIngredients, data.id, {
-        price: data.price,
-        count: data.value,
-        image: data.image,
+    // Изменение количества ингредиентов по любому виду ввода
+    changeIngredientCount(data, id) {
+      this.order.selectedIngredients.forEach((ingredient) => {
+        if (typeof data === "boolean") {
+          if (ingredient.id === id && data === true)
+            ingredient.count != 3 ? ingredient.count++ : false;
+          if (ingredient.id === id && data === false)
+            ingredient.count != 0 ? ingredient.count-- : false;
+        } else if (typeof data === "object") {
+          // BUG: число в input не обновляется если оно больше 30, но данные сохраняются верно
+          if (ingredient.id === id)
+            ingredient.count =
+              data.count > 3 || data.count < 0 ? 3 : data.count;
+        }
       });
     },
-    // Добавление ингредиента по одному через button и drag'n'drop
-    addIngredient(ingredientId) {
-      if (this.selectedPizzaParameters.selectedIngredients[ingredientId]) {
-        this.selectedPizzaParameters.selectedIngredients[ingredientId].count++;
-      } else {
-        this.$set(
-          this.selectedPizzaParameters.selectedIngredients,
-          ingredientId,
-          {
-            price: this.pizza.ingredients[ingredientId - 1].price,
-            count: 1,
-            image: this.pizza.ingredients[ingredientId - 1].image,
-          }
-        );
+  },
+  mounted() {
+    // Буду считать количество каждого ингредиента в общем массиве
+    this.order.selectedIngredients = this.pizza.ingredients.map(
+      (ingredient) => {
+        return {
+          ...ingredient,
+          count: 0,
+        };
       }
-    },
-    // Убавление ингредиента по одному через button
-    removeIngredient(ingredientId) {
-      if (this.selectedPizzaParameters.selectedIngredients[ingredientId]) {
-        this.selectedPizzaParameters.selectedIngredients[ingredientId].count--;
-      } else {
-        this.$set(
-          this.selectedPizzaParameters.selectedIngredients,
-          ingredientId,
-          {
-            price: this.pizza.ingredients[ingredientId - 1].price,
-            count: 0,
-            image: this.pizza.ingredients[ingredientId - 1].image,
-          }
-        );
-      }
-    },
+    );
+    this.order.size = this.pizza.sizes[0];
+    this.order.dough = this.pizza.dough[0];
+    this.order.sauce = this.pizza.sauces[0];
   },
 };
 </script>

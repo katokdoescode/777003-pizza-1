@@ -7,16 +7,15 @@
         <radio-button
           v-for="doughItem in dough"
           :key="'dough-' + doughItem.id"
-          :radioBtnValue="doughItem.price"
+          :value="doughItem.price"
           :class="['dough__input', getDoughSize(dough)]"
-          :radioBtnClass="['visually-hidden']"
-          radioBtnName="dought"
-          @selectValue="updateSelectedDoughPrice"
+          hidden
+          :checked="doughItem === selectedDough"
+          name="dought"
+          @selectValue="updateSelectedDoughPrice(doughItem)"
         >
-          <template v-slot>
-            <b>{{ doughItem.name }}</b>
-            <span>{{ doughItem.description }}</span>
-          </template>
+          <b>{{ doughItem.name }}</b>
+          <span>{{ doughItem.description }}</span>
         </radio-button>
       </div>
     </div>
@@ -26,26 +25,23 @@
 import RadioButton from "@/common/components/RadioButton.vue";
 export default {
   name: "DoughSelector",
-  data() {
-    return {
-      selectedDoughPrice: null,
-    };
-  },
   props: {
     dough: {
       type: Array,
+      required: true,
+    },
+    selectedDough: {
+      type: Object,
       required: true,
     },
   },
   components: { RadioButton },
   methods: {
     getDoughSize(dough) {
-      return "dough__input--" + (dough.name == "Тонкое" ? "light" : "large");
+      return "dough__input--" + (dough.name === "Тонкое" ? "light" : "large");
     },
-    // Сохраняю и передаю выше цену выбранного теста
     updateSelectedDoughPrice(price) {
-      this.selectedDoughPrice = price;
-      this.$emit("doughSelected", this.selectedDoughPrice);
+      this.$emit("doughSelected", price);
     },
   },
 };

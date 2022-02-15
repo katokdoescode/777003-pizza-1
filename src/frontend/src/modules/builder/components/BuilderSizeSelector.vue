@@ -8,14 +8,13 @@
           v-for="size in sizes"
           :key="'size-' + size.id"
           :class="['diameter__input', 'diameter__input--' + getPizzaSize(size)]"
-          :radioBtnClass="['visually-hidden']"
-          :radioBtnValue="size.multiplier"
-          radioBtnName="diametr"
-          @selectValue="updateSelectedSize"
+          hidden
+          :value="size.multiplier"
+          name="diametr"
+          :checked="size === selectedSize"
+          @selectValue="updateSelectedSize(size)"
         >
-          <template v-slot>
-            <span>{{ size.name }}</span>
-          </template>
+          <span>{{ size.name }}</span>
         </radio-button>
       </div>
     </div>
@@ -25,21 +24,21 @@
 import RadioButton from "@/common/components/RadioButton.vue";
 export default {
   name: "SizeSelector",
-  data() {
-    return {
-      selectedSizeMultiplier: null,
-    };
-  },
   props: {
+    // Про валидацию знаю, но если честно не понимаю что тут валидировать
     sizes: {
       type: Array,
+      required: true,
+    },
+    selectedSize: {
+      type: Object,
       required: true,
     },
   },
   components: { RadioButton },
   methods: {
     getPizzaSize(size) {
-      switch (size.multiplier) {
+      switch (size.id) {
         case 1:
           return "small";
         case 2:
@@ -50,10 +49,9 @@ export default {
           break;
       }
     },
-    // Сохраняю и передаю выше выбранный размер пиццы
+    // Передаю выше выбранный размер пиццы
     updateSelectedSize(size) {
-      this.selectedSizeMultiplier = size;
-      this.$emit("sizeSelected", this.selectedSizeMultiplier);
+      this.$emit("sizeSelected", size);
     },
   },
 };

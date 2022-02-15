@@ -2,10 +2,11 @@
   <label>
     <input
       type="radio"
-      :name="radioBtnName"
-      :value="radioBtnValue"
-      :class="radioBtnClass"
-      @input="selectValue"
+      :name="name"
+      :value="value"
+      :class="[{ 'visually-hidden': hidden }]"
+      :checked="checked"
+      @input="$emit('selectValue', Number($event.target.value))"
     />
     <slot></slot>
   </label>
@@ -14,22 +15,21 @@
 export default {
   name: "RadioButton",
   props: {
-    radioBtnClass: {
-      type: Array,
-      required: false,
+    hidden: {
+      type: Boolean,
+      default: false,
     },
-    radioBtnName: {
+    name: {
       type: String,
       required: true,
     },
-    radioBtnValue: {
+    value: {
       type: [String, Number],
       required: true,
     },
-  },
-  methods: {
-    selectValue(e) {
-      this.$emit("selectValue", Number(e.target.value));
+    checked: {
+      type: Boolean,
+      default: false,
     },
   },
 };

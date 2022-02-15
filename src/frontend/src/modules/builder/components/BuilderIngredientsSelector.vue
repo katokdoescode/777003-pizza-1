@@ -10,13 +10,12 @@
             v-for="sauce in sauces"
             :key="'sauce-' + sauce.id"
             :class="['radio', 'ingredients__input']"
-            radioBtnName="sauce"
-            :radioBtnValue="sauce.price"
-            @selectValue="updateSelectedSauce"
+            name="sauce"
+            :checked="sauce === selectedSauce"
+            :value="sauce.price"
+            @selectValue="updateSelectedSauce(sauce)"
           >
-            <template v-slot>
-              <span>{{ sauce.name }}</span>
-            </template>
+            <span>{{ sauce.name }}</span>
           </radio-button>
         </div>
 
@@ -35,15 +34,11 @@
                 </span>
               </drag-wrapper>
               <item-counter
-                :count="
-                  selectedIngredients[ingredient.id]
-                    ? selectedIngredients[ingredient.id].count
-                    : 0
-                "
                 :item="ingredient"
-                @counterPlus="$emit('addIngredient', ingredient.id)"
-                @counterMinus="$emit('removeIngredient', ingredient.id)"
-                @changeCount="$emit('changeIngredientCount', $event)"
+                :count="ingredient.count"
+                @changeCount="
+                  $emit('changeIngredientCount', $event, ingredient.id)
+                "
               />
             </li>
           </ul>
@@ -58,22 +53,22 @@ import RadioButton from "@/common/components/RadioButton.vue";
 import DragWrapper from "@/common/components/DragWrapper.vue";
 export default {
   name: "IngredientsSelector",
-  data() {
-    return {
-      selectedSaucePrice: null,
-    };
-  },
   props: {
     ingredients: {
       type: Array,
       required: true,
     },
     selectedIngredients: {
-      type: Object,
+      // Only one in future!
+      type: [Array, Object],
       required: false,
     },
     sauces: {
       type: Array,
+      required: true,
+    },
+    selectedSauce: {
+      type: Object,
       required: true,
     },
   },
@@ -87,10 +82,9 @@ export default {
       const imagePath = ingredient.image.split("/");
       return imagePath[3] + "--" + imagePath[4].slice(0, -4);
     },
-    // Сохраняю и передаю в родительский компонент цену выбранного соуса
+    // Передаю в родительский компонент цену выбранного соуса
     updateSelectedSauce(price) {
-      this.selectedSaucePrice = price;
-      this.$emit("sauceSelected", this.selectedSaucePrice);
+      this.$emit("sauceSelected", price);
     },
   },
 };

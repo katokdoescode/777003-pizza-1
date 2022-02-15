@@ -3,7 +3,7 @@
     <button
       type="button"
       class="counter__button counter__button--minus"
-      @click="counterMinus"
+      @click="changeCount(false)"
       :disabled="count <= 0"
     >
       <span class="visually-hidden">Меньше</span>
@@ -18,7 +18,8 @@
     <button
       type="button"
       class="counter__button counter__button--plus"
-      @click="counterPlus"
+      @click="changeCount(true)"
+      :disabled="count >= 3"
     >
       <span class="visually-hidden">Больше</span>
     </button>
@@ -38,19 +39,19 @@ export default {
     },
   },
   methods: {
-    counterPlus() {
-      this.$emit("counterPlus");
-    },
-    counterMinus() {
-      this.$emit("counterMinus");
-    },
     changeCount(e) {
-      this.$emit("changeCount", {
-        value: Number(e.target.value),
-        id: this.item.id,
-        price: Number(this.item.price),
-        image: this.item.image,
-      });
+      if (e === true) {
+        this.$emit("changeCount", e);
+      } else if (e === false) {
+        this.$emit("changeCount", e);
+      } else {
+        this.$emit("changeCount", {
+          id: this.item.id,
+          count: Number(e.target.value),
+          price: Number(this.item.price),
+          image: this.item.image,
+        });
+      }
     },
   },
 };
