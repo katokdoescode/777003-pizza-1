@@ -5,7 +5,8 @@
       :name="name"
       :value="value"
       :class="[{ 'visually-hidden': hidden }]"
-      @input="selectValue"
+      :checked="checked"
+      @input="$emit('selectValue', Number($event.target.value))"
     />
     <slot></slot>
   </label>
@@ -26,10 +27,9 @@ export default {
       type: [String, Number],
       required: true,
     },
-  },
-  methods: {
-    selectValue(e) {
-      this.$emit("selectValue", Number(e.target.value));
+    checked: {
+      type: Boolean,
+      default: false,
     },
   },
 };

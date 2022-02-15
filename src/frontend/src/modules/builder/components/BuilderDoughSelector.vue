@@ -10,8 +10,9 @@
           :value="doughItem.price"
           :class="['dough__input', getDoughSize(dough)]"
           hidden
+          :checked="doughItem == selectedDough"
           name="dought"
-          @selectValue="updateSelectedDoughPrice"
+          @selectValue="updateSelectedDoughPrice(doughItem)"
         >
           <b>{{ doughItem.name }}</b>
           <span>{{ doughItem.description }}</span>
@@ -29,13 +30,16 @@ export default {
       type: Array,
       required: true,
     },
+    selectedDough: {
+      type: Object,
+      required: true,
+    },
   },
   components: { RadioButton },
   methods: {
     getDoughSize(dough) {
       return "dough__input--" + (dough.name == "Тонкое" ? "light" : "large");
     },
-    // Передаю выше цену выбранного теста
     updateSelectedDoughPrice(price) {
       this.$emit("doughSelected", price);
     },

@@ -11,8 +11,9 @@
             :key="'sauce-' + sauce.id"
             :class="['radio', 'ingredients__input']"
             name="sauce"
+            :checked="sauce == selectedSauce"
             :value="sauce.price"
-            @selectValue="updateSelectedSauce"
+            @selectValue="updateSelectedSauce(sauce)"
           >
             <span>{{ sauce.name }}</span>
           </radio-button>
@@ -64,6 +65,10 @@ export default {
     },
     sauces: {
       type: Array,
+      required: true,
+    },
+    selectedSauce: {
+      type: Object,
       required: true,
     },
   },

@@ -12,7 +12,7 @@
       class="content__constructor"
       @drop="$emit('droppedItem', $event.id)"
     >
-      <div class="pizza pizza--foundation--big-tomato">
+      <div :class="['pizza', pizzaClass]">
         <div class="pizza__wrapper">
           <div
             class="pizza__filling"
@@ -36,12 +36,32 @@ export default {
       type: [Array, Object],
       required: false,
     },
+    sauce: {
+      type: Object,
+      required: true,
+    },
+    size: {
+      type: Object,
+      required: true,
+    },
+    dough: {
+      type: Object,
+      required: true,
+    },
   },
   computed: {
     // Чтобы на пиццу попадали только игредиенты с количеством отличным от нуля
     onlyCountedIngredients() {
       const ingredients = Object.values(this.ingredients);
       return ingredients.filter((ingredient) => ingredient.count != 0);
+    },
+    pizzaClass() {
+      let baseClass =
+        "pizza--foundation--" +
+        (this.dough.name == "Тонкое" ? "small" : "big") +
+        "-" +
+        (this.sauce.name == "Томатный" ? "tomato" : "creamy");
+      return baseClass;
     },
   },
   methods: {

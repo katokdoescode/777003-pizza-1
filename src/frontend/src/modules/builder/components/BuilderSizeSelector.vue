@@ -11,7 +11,8 @@
           hidden
           :value="size.multiplier"
           name="diametr"
-          @selectValue="updateSelectedSize"
+          :checked="size == selectedSize"
+          @selectValue="updateSelectedSize(size)"
         >
           <span>{{ size.name }}</span>
         </radio-button>
@@ -26,6 +27,10 @@ export default {
   props: {
     sizes: {
       type: Array,
+      required: true,
+    },
+    selectedSize: {
+      type: Object,
       required: true,
     },
   },
