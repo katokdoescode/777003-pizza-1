@@ -38,7 +38,7 @@ export default {
   components: { RadioButton },
   methods: {
     getPizzaSize(size) {
-      switch (size.multiplier) {
+      switch (size.id) {
         case 1:
           return "small";
         case 2:
