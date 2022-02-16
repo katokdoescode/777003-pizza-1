@@ -31,6 +31,7 @@
           :sauce="order.sauce"
           :size="order.size"
           :dough="order.dough"
+          :pizzaIngredients="pizza.ingredients"
         >
           <builder-price-counter :price="totalPrice" />
         </builder-pizza-view>
