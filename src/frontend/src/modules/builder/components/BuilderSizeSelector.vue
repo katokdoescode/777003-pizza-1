@@ -23,7 +23,7 @@
 <script>
 import RadioButton from "@/common/components/RadioButton.vue";
 export default {
-  name: "SizeSelector",
+  name: "BuilderPriceCounter",
   props: {
     // Про валидацию знаю, но если честно не понимаю что тут валидировать
     sizes: {

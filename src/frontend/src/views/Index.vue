@@ -57,7 +57,7 @@ export default {
     BuilderPizzaView,
     BuilderPriceCounter,
   },
-  name: "Constructor",
+  name: "Index",
   data() {
     return {
       misc,

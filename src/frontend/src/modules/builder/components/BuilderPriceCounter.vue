@@ -8,7 +8,7 @@
 </template>
 <script>
 export default {
-  name: "PriceCounter",
+  name: "BuilderPriceCounter",
   props: {
     price: {
       type: Number,
