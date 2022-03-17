@@ -36,6 +36,7 @@ export default {
     item: {
       type: Object,
       required: true,
+      validate: (v) => v.id !== null,
     },
   },
   methods: {

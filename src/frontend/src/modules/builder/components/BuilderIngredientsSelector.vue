@@ -57,6 +57,7 @@ export default {
     ingredients: {
       type: Array,
       required: true,
+      validate: (v) => v.id !== null,
     },
     selectedIngredients: {
       // Only one in future!
@@ -66,10 +67,12 @@ export default {
     sauces: {
       type: Array,
       required: true,
+      validate: (v) => v.id !== null,
     },
     selectedSauce: {
       type: Object,
       required: true,
+      validate: (v) => v.id !== null,
     },
   },
   components: {
@@ -89,4 +92,3 @@ export default {
   },
 };
 </script>
-<style></style>

@@ -29,10 +29,12 @@ export default {
     dough: {
       type: Array,
       required: true,
+      validate: (v) => v.name !== null,
     },
     selectedDough: {
       type: Object,
       required: true,
+      validate: (v) => v.name !== null,
     },
   },
   components: { RadioButton },

@@ -40,18 +40,17 @@ export default {
     ingredients: {
       type: [Array, Object],
       required: false,
+      validate: (v) => v.id !== null,
     },
     sauce: {
       type: Object,
       required: true,
-    },
-    size: {
-      type: Object,
-      required: true,
+      validate: (v) => v.name !== null,
     },
     dough: {
       type: Object,
       required: true,
+      validate: (v) => v.name !== null,
     },
   },
   computed: {

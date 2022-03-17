@@ -29,6 +29,7 @@ export default {
     sizes: {
       type: Array,
       required: true,
+      validate: (v) => v.id !== null,
     },
     selectedSize: {
       type: Object,
