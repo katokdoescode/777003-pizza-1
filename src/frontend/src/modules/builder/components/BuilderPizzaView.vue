@@ -16,9 +16,14 @@
         <div class="pizza__wrapper">
           <div
             class="pizza__filling"
-            v-for="ingredient in onlyCountedIngredients"
-            :key="'on-pizza-ingredient-' + getIngredientName(ingredient)"
-            :class="'pizza__filling--' + getIngredientName(ingredient)"
+            v-for="(ingredient, key) in ingredientsList"
+            :key="
+              'on-pizza-ingredient-' + getIngredientName(ingredient) + '-' + key
+            "
+            :class="[
+              'pizza__filling--' + getIngredientName(ingredient),
+              ingredient.class,
+            ]"
           ></div>
         </div>
       </div>
@@ -54,6 +59,24 @@ export default {
     onlyCountedIngredients() {
       const ingredients = Object.values(this.ingredients);
       return ingredients.filter((ingredient) => ingredient.count !== 0);
+    },
+    // Добавляю второму и третьему ингредиенту класс
+    ingredientsList() {
+      const ingredients = [];
+      this.onlyCountedIngredients.forEach((ingredient) => {
+        for (let i = 1; i <= ingredient.count; i++) {
+          ingredients.push({
+            ...ingredient,
+            class:
+              i === 2
+                ? "pizza__filling--second"
+                : i === 3
+                ? "pizza__filling--third"
+                : null,
+          });
+        }
+      });
+      return ingredients;
     },
     pizzaClass() {
       let baseClass =
