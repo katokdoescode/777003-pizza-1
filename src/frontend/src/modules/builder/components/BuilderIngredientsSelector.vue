@@ -52,7 +52,7 @@ import ItemCounter from "@/common/components/ItemCounter.vue";
 import RadioButton from "@/common/components/RadioButton.vue";
 import DragWrapper from "@/common/components/DragWrapper.vue";
 export default {
-  name: "IngredientsSelector",
+  name: "BuilderIngredientsSelector",
   props: {
     ingredients: {
       type: Array,

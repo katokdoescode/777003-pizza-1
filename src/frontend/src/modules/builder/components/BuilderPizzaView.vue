@@ -34,7 +34,7 @@
 <script>
 import DropArea from "@/common/components/DropArea.vue";
 export default {
-  name: "PizzaView",
+  name: "BuilderIngredientsSelector",
   components: { DropArea },
   props: {
     ingredients: {

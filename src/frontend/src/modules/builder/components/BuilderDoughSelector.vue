@@ -24,7 +24,7 @@
 <script>
 import RadioButton from "@/common/components/RadioButton.vue";
 export default {
-  name: "DoughSelector",
+  name: "BuilderDoughSelector",
   props: {
     dough: {
       type: Array,
