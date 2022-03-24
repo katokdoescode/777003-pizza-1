@@ -19,7 +19,6 @@
         <builder-ingredients-selector
           :ingredients="order.selectedIngredients"
           :sauces="pizza.sauces"
-          :selectedIngredients="order.selectedIngredients"
           :selectedSauce="order.sauce"
           @sauceSelected="order.sauce = $event"
           @changeIngredientCount="changeIngredientCount"

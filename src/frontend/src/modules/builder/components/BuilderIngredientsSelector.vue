@@ -59,11 +59,6 @@ export default {
       required: true,
       validate: (v) => v.id !== null,
     },
-    selectedIngredients: {
-      // Only one in future!
-      type: [Array, Object],
-      required: false,
-    },
     sauces: {
       type: Array,
       required: true,
