@@ -4,6 +4,7 @@
       <h2 class="title title--small sheet__title">Выберите ингредиенты</h2>
 
       <div class="sheet__content ingredients">
+        <!-- Убрать в отдельный компонент -->
         <div class="ingredients__sauce">
           <p>Основной соус:</p>
           <radio-button
@@ -21,8 +22,8 @@
 
         <div class="ingredients__filling">
           <p>Начинка:</p>
-
           <ul class="ingredients__list">
+            <!-- Убрать в отдельный компонент -->
             <li
               class="ingredients__item"
               v-for="ingredient in ingredients"
@@ -35,10 +36,10 @@
               </drag-wrapper>
               <item-counter
                 :item="ingredient"
-                :count="ingredient.count"
-                @changeCount="
-                  $emit('changeIngredientCount', $event, ingredient.id)
-                "
+                :id="ingredient.id"
+                :max="maxIngredientsCount"
+                :count.sync="selectedIngredients[ingredient.id]"
+                @changeCount="$emit('changeIngredientCount', $event)"
               />
             </li>
           </ul>
@@ -58,6 +59,16 @@ export default {
       type: Array,
       required: true,
       validate: (v) => v.id !== null,
+    },
+    selectedIngredients: {
+      type: Object,
+      required: true,
+      validate: (v) => v != null,
+    },
+    maxIngredientsCount: {
+      type: Number,
+      default: 3,
+      validate: (v) => v >= 0,
     },
     sauces: {
       type: Array,

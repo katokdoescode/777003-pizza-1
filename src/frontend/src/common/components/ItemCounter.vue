@@ -20,7 +20,7 @@
       type="button"
       class="counter__button counter__button--plus"
       @click="changeCount(count + 1)"
-      :disabled="count >= 3"
+      :disabled="count >= max"
     >
       <span class="visually-hidden">Больше</span>
     </button>
@@ -34,19 +34,20 @@ export default {
       type: Number,
       default: 0,
     },
-    item: {
-      type: Object,
-      required: true,
-      validate: (v) => v.id !== null,
+    max: {
+      type: Number,
+      default: 3,
+    },
+    id: {
+      type: [Number, String],
+      validate: (v) => v != null && v != undefined && v != "",
     },
   },
   methods: {
     changeCount(value) {
       this.$emit("changeCount", {
-        id: this.item.id,
-        count: Number(value),
-        price: Number(this.item.price),
-        image: this.item.image,
+        id: this.id,
+        count: Number(value) <= this.max ? Number(value) : this.max,
       });
     },
   },

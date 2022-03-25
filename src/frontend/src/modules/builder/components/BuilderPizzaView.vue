@@ -8,10 +8,7 @@
         placeholder="Введите название пиццы"
       />
     </label>
-    <drop-area
-      class="content__constructor"
-      @drop="$emit('droppedItem', $event.id)"
-    >
+    <drop-area class="content__constructor" @drop="onItemDrop">
       <div :class="['pizza', pizzaClass]">
         <div class="pizza__wrapper">
           <div
@@ -42,6 +39,11 @@ export default {
       required: false,
       validate: (v) => v.id !== null,
     },
+    selectedIngredients: {
+      type: Object,
+      required: true,
+      validate: (v) => v != null,
+    },
     sauce: {
       type: Object,
       required: true,
@@ -54,16 +56,11 @@ export default {
     },
   },
   computed: {
-    // Чтобы на пиццу попадали только игредиенты с количеством отличным от нуля
-    onlyCountedIngredients() {
-      const ingredients = Object.values(this.ingredients);
-      return ingredients.filter((ingredient) => ingredient.count !== 0);
-    },
     // Добавляю второму и третьему ингредиенту класс
     ingredientsList() {
       const ingredients = [];
-      this.onlyCountedIngredients.forEach((ingredient) => {
-        for (let i = 1; i <= ingredient.count; i++) {
+      this.ingredients.forEach((ingredient) => {
+        for (let i = 1; i <= this.selectedIngredients[ingredient.id]; i++) {
           ingredients.push({
             ...ingredient,
             class:
@@ -87,6 +84,14 @@ export default {
     },
   },
   methods: {
+    onItemDrop({ id }) {
+      this.$emit("droppedItem", {
+        id: id,
+        count: this.selectedIngredients[id]
+          ? this.selectedIngredients[id] + 1
+          : 1,
+      });
+    },
     getIngredientName(ingredient) {
       const imagePath = ingredient.image.split("/");
       return imagePath[4].slice(0, -4);
