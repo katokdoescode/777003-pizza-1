@@ -77,13 +77,15 @@ export default {
   computed: {
     // Считаю итоговую цену, учитывая все параметры пиццы
     totalPrice() {
-      // reduce
       let total = 0;
+      // Стоимость теста
       total = this.order.sauce.price + this.order.dough.price;
+      // Стоимость ингредиентов
       Object.keys(this.order.selectedIngredients).forEach((id) => {
         total +=
           this.pizza.ingredients[id].price * this.order.selectedIngredients[id];
       });
+      // Возвращаю с учетом множителя размера пиццы
       return this.order.size.multiplier != 0
         ? total * this.order.size.multiplier
         : total;
