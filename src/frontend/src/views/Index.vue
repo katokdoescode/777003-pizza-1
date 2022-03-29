@@ -17,17 +17,19 @@
         />
 
         <builder-ingredients-selector
-          :ingredients="order.selectedIngredients"
-          :sauces="pizza.sauces"
+          :ingredients="pizza.ingredients"
           :selectedIngredients="order.selectedIngredients"
+          :maxIngredientsCount="maxIngredientsCount"
+          :sauces="pizza.sauces"
           :selectedSauce="order.sauce"
           @sauceSelected="order.sauce = $event"
           @changeIngredientCount="changeIngredientCount"
         />
 
         <builder-pizza-view
-          @droppedItem="changeIngredientCount(true, $event)"
-          :ingredients="order.selectedIngredients"
+          @droppedItem="changeIngredientCount($event)"
+          :ingredients="pizza.ingredients"
+          :selectedIngredients="order.selectedIngredients"
           :sauce="order.sauce"
           :size="order.size"
           :dough="order.dough"
@@ -57,14 +59,15 @@ export default {
     BuilderPizzaView,
     BuilderPriceCounter,
   },
-  name: "Constructor",
+  name: "Index",
   data() {
     return {
       misc,
       pizza,
       user,
+      maxIngredientsCount: 3,
       order: {
-        selectedIngredients: [],
+        selectedIngredients: {},
         size: {},
         dough: {},
         sauce: {},
@@ -75,12 +78,14 @@ export default {
     // Считаю итоговую цену, учитывая все параметры пиццы
     totalPrice() {
       let total = 0;
+      // Стоимость теста
       total = this.order.sauce.price + this.order.dough.price;
-      if (this.order.selectedIngredients.length > 0) {
-        this.order.selectedIngredients.forEach((ingredient) => {
-          total += ingredient.price * ingredient.count;
-        });
-      }
+      // Стоимость ингредиентов
+      Object.keys(this.order.selectedIngredients).forEach((id) => {
+        total +=
+          this.pizza.ingredients[id].price * this.order.selectedIngredients[id];
+      });
+      // Возвращаю с учетом множителя размера пиццы
       return this.order.size.multiplier != 0
         ? total * this.order.size.multiplier
         : total;
@@ -88,32 +93,15 @@ export default {
   },
   methods: {
     // Изменение количества ингредиентов по любому виду ввода
-    changeIngredientCount(data, id) {
-      this.order.selectedIngredients.forEach((ingredient) => {
-        if (typeof data === "boolean") {
-          if (ingredient.id === id && data === true)
-            ingredient.count != 3 ? ingredient.count++ : false;
-          if (ingredient.id === id && data === false)
-            ingredient.count != 0 ? ingredient.count-- : false;
-        } else if (typeof data === "object") {
-          // BUG: число в input не обновляется если оно больше 30, но данные сохраняются верно
-          if (ingredient.id === id)
-            ingredient.count =
-              data.count > 3 || data.count < 0 ? 3 : data.count;
-        }
-      });
+    changeIngredientCount({ id, count }) {
+      this.$set(
+        this.order.selectedIngredients,
+        id,
+        count <= this.maxIngredientsCount ? count : this.maxIngredientsCount
+      );
     },
   },
   mounted() {
-    // Буду считать количество каждого ингредиента в общем массиве
-    this.order.selectedIngredients = this.pizza.ingredients.map(
-      (ingredient) => {
-        return {
-          ...ingredient,
-          count: 0,
-        };
-      }
-    );
     this.order.size = this.pizza.sizes[0];
     this.order.dough = this.pizza.dough[0];
     this.order.sauce = this.pizza.sauces[0];

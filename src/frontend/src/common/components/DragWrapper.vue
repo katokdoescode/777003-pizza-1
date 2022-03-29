@@ -21,8 +21,7 @@ export default {
   },
   methods: {
     onDrag({ dataTransfer }) {
-      dataTransfer.dropEffect = "move";
-      dataTransfer.effectAllowed = "move";
+      dataTransfer.dropEffect = dataTransfer.effectAllowed = "move";
       dataTransfer.setData("payload", JSON.stringify(this.transferData));
     },
   },
