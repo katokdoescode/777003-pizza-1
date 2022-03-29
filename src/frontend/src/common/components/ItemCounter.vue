@@ -29,6 +29,10 @@
 <script>
 export default {
   name: "ItemCounter",
+  model: {
+    prop: "count",
+    event: "changeCount",
+  },
   props: {
     count: {
       type: Number,

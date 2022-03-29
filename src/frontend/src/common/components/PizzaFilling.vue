@@ -16,7 +16,7 @@
           :item="ingredient"
           :id="ingredient.id"
           :max="maxIngredientsCount"
-          :count.sync="selectedIngredients[ingredient.id]"
+          v-model="selectedIngredients[ingredient.id]"
           @changeCount="$emit('changeCount', $event)"
         />
       </li>
