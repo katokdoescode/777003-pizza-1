@@ -1,15 +1,14 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Constructor from "../views/Index.vue";
-// import { wrapRouter } from "oaf-vue-router";
+import Index from "../views/Index.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
   {
     path: "/",
-    name: "Constructor",
-    component: Constructor,
+    name: "MainPage",
+    component: Index,
   },
 ];
 

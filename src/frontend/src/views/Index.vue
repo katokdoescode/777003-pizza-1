@@ -1,224 +1,110 @@
 <template>
-  <div id="constructor-page">
-    <header class="header">
-      <div class="header__logo">
-        <a href="/" class="logo">
-          <img
-            src="@/assets/img/logo.svg"
-            alt="V!U!E! Pizza logo"
-            width="90"
-            height="40"
-          />
-        </a>
+  <main class="content">
+    <form action="#" method="post">
+      <div class="content__wrapper">
+        <h1 class="title title--big">Конструктор пиццы</h1>
+
+        <builder-dough-selector
+          :dough="pizza.dough"
+          :selectedDough="order.dough"
+          @doughSelected="order.dough = $event"
+        />
+
+        <builder-size-selector
+          :sizes="pizza.sizes"
+          :selectedSize="order.size"
+          @sizeSelected="order.size = $event"
+        />
+
+        <builder-ingredients-selector
+          :ingredients="pizza.ingredients"
+          :selectedIngredients="order.selectedIngredients"
+          :maxIngredientsCount="maxIngredientsCount"
+          :sauces="pizza.sauces"
+          :selectedSauce="order.sauce"
+          @sauceSelected="order.sauce = $event"
+          @changeIngredientCount="changeIngredientCount"
+        />
+
+        <builder-pizza-view
+          @droppedItem="changeIngredientCount($event)"
+          :ingredients="pizza.ingredients"
+          :selectedIngredients="order.selectedIngredients"
+          :sauce="order.sauce"
+          :size="order.size"
+          :dough="order.dough"
+        >
+          <builder-price-counter :price="totalPrice" />
+        </builder-pizza-view>
       </div>
-      <div class="header__cart">
-        <a href="cart.html">0 ₽</a>
-      </div>
-      <div class="header__user">
-        <!-- Нет стилей для ссылки на вход :( -->
-        <a href="#" class="header__login"><span>Войти</span></a>
-      </div>
-    </header>
-
-    <main class="content">
-      <form action="#" method="post">
-        <div class="content__wrapper">
-          <h1 class="title title--big">Конструктор пиццы</h1>
-
-          <div class="content__dough">
-            <div class="sheet">
-              <h2 class="title title--small sheet__title">Выберите тесто</h2>
-
-              <div class="sheet__content dough">
-                <label
-                  class="dough__input"
-                  :class="getDoughSize(dough)"
-                  v-for="(dough, key) in pizza.dough"
-                  :key="'dough-' + key"
-                >
-                  <input
-                    type="radio"
-                    name="dought"
-                    :value="dough.name"
-                    v-model="order.dough"
-                    class="visually-hidden"
-                  />
-                  <b>{{ dough.name }}</b>
-                  <span>{{ dough.description }}</span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="content__diameter">
-            <div class="sheet">
-              <h2 class="title title--small sheet__title">Выберите размер</h2>
-
-              <div class="sheet__content diameter">
-                <label
-                  class="diameter__input"
-                  :class="'diameter__input--' + getPizzaSize(size)"
-                  v-for="(size, key) in pizza.sizes"
-                  :key="'size-' + key"
-                >
-                  <input
-                    type="radio"
-                    name="diameter"
-                    :value="size.multiplier"
-                    v-model="order.size"
-                    class="visually-hidden"
-                  />
-                  <span>{{ size.name }}</span>
-                </label>
-              </div>
-            </div>
-          </div>
-
-          <div class="content__ingredients">
-            <div class="sheet">
-              <h2 class="title title--small sheet__title">
-                Выберите ингредиенты
-              </h2>
-
-              <div class="sheet__content ingredients">
-                <div class="ingredients__sauce">
-                  <p>Основной соус:</p>
-
-                  <label
-                    class="radio ingredients__input"
-                    v-for="(sauce, key) in pizza.sauces"
-                    :key="'sauce-' + key"
-                  >
-                    <input
-                      type="radio"
-                      name="sauce"
-                      :value="sauce.name"
-                      v-model="order.sauce"
-                    />
-                    <span>{{ sauce.name }}</span>
-                  </label>
-                </div>
-
-                <div class="ingredients__filling">
-                  <p>Начинка:</p>
-
-                  <ul class="ingredients__list">
-                    <li
-                      class="ingredients__item"
-                      v-for="(ingredient, key) in pizza.ingredients"
-                      :key="'ingredient-' + key"
-                    >
-                      <span
-                        class="filling"
-                        :class="getIngredientClass(ingredient)"
-                      >
-                        {{ ingredient.name }}
-                      </span>
-
-                      <div class="counter counter--orange ingredients__counter">
-                        <button
-                          type="button"
-                          class="counter__button counter__button--minus"
-                          disabled
-                        >
-                          <span class="visually-hidden">Меньше</span>
-                        </button>
-                        <input
-                          type="text"
-                          name="counter"
-                          class="counter__input"
-                          value="0"
-                        />
-                        <button
-                          type="button"
-                          class="counter__button counter__button--plus"
-                        >
-                          <span class="visually-hidden">Больше</span>
-                        </button>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="content__pizza">
-            <label class="input">
-              <span class="visually-hidden">Название пиццы</span>
-              <input
-                type="text"
-                name="pizza_name"
-                v-model="order.pizza_name"
-                placeholder="Введите название пиццы"
-              />
-            </label>
-
-            <div class="content__constructor">
-              <div class="pizza pizza--foundation--big-tomato">
-                <div class="pizza__wrapper">
-                  <div class="pizza__filling pizza__filling--ananas"></div>
-                  <div class="pizza__filling pizza__filling--bacon"></div>
-                  <div class="pizza__filling pizza__filling--cheddar"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="content__result">
-              <p>Итого: 0 ₽</p>
-              <button type="button" class="button" disabled>Готовьте!</button>
-            </div>
-          </div>
-        </div>
-      </form>
-    </main>
-  </div>
+    </form>
+  </main>
 </template>
 
 <script>
 import misc from "@/static/misc.json";
 import pizza from "@/static/pizza.json";
 import user from "@/static/user.json";
+import BuilderDoughSelector from "@/modules/builder/components/BuilderDoughSelector.vue";
+import BuilderSizeSelector from "@/modules/builder/components/BuilderSizeSelector.vue";
+import BuilderIngredientsSelector from "@/modules/builder/components/BuilderIngredientsSelector.vue";
+import BuilderPizzaView from "@/modules/builder/components/BuilderPizzaView.vue";
+import BuilderPriceCounter from "@/modules/builder/components/BuilderPriceCounter.vue";
 
 export default {
-  name: "Constructor",
+  components: {
+    BuilderDoughSelector,
+    BuilderSizeSelector,
+    BuilderIngredientsSelector,
+    BuilderPizzaView,
+    BuilderPriceCounter,
+  },
+  name: "Index",
   data() {
     return {
       misc,
       pizza,
       user,
+      maxIngredientsCount: 3,
       order: {
-        dough: null,
-        sauce: null,
-        pizza_name: null,
+        selectedIngredients: {},
+        size: {},
+        dough: {},
+        sauce: {},
       },
     };
   },
+  computed: {
+    // Считаю итоговую цену, учитывая все параметры пиццы
+    totalPrice() {
+      let total = 0;
+      // Стоимость теста
+      total = this.order.sauce.price + this.order.dough.price;
+      // Стоимость ингредиентов
+      Object.keys(this.order.selectedIngredients).forEach((id) => {
+        total +=
+          this.pizza.ingredients[id].price * this.order.selectedIngredients[id];
+      });
+      // Возвращаю с учетом множителя размера пиццы
+      return this.order.size.multiplier != 0
+        ? total * this.order.size.multiplier
+        : total;
+    },
+  },
   methods: {
-    /*
-      Не уверен насчет этих методов,
-      но это лучшее что мне сейчас пришло в голову
-      для сохранения классов.
-    */
-    getDoughSize(dough) {
-      return "dough__input--" + (dough.name == "Тонкое" ? "light" : "large");
+    // Изменение количества ингредиентов по любому виду ввода
+    changeIngredientCount({ id, count }) {
+      this.$set(
+        this.order.selectedIngredients,
+        id,
+        count <= this.maxIngredientsCount ? count : this.maxIngredientsCount
+      );
     },
-    getPizzaSize(size) {
-      switch (size.multiplier) {
-        case 1:
-          return "small";
-        case 2:
-          return "normal";
-        case 3:
-          return "big";
-        default:
-          break;
-      }
-    },
-    getIngredientClass(ingredient) {
-      const imagePath = ingredient.image.split("/");
-      return imagePath[3] + "--" + imagePath[4].slice(0, -4);
-    },
+  },
+  mounted() {
+    this.order.size = this.pizza.sizes[0];
+    this.order.dough = this.pizza.dough[0];
+    this.order.sauce = this.pizza.sauces[0];
   },
 };
 </script>
