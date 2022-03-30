@@ -1,14 +1,19 @@
 <template>
-  <div id="app-layout">
-    <header-layout />
-    <router-view />
-  </div>
+  <component :is="layout">
+    <slot />
+  </component>
 </template>
 <script>
-import HeaderLayout from "@/layouts/HeaderLayout.vue";
+const defaultLayout = "AppLayoutDefault";
+
 export default {
   name: "AppLayout",
-  components: { HeaderLayout },
+  computed: {
+    layout() {
+      const layout = this.$route.meta.layout || defaultLayout;
+      return () => import(`@/layouts/${layout}.vue`);
+    },
+  },
 };
 </script>
 <style></style>
