@@ -6,6 +6,7 @@
         type="text"
         name="pizza_name"
         placeholder="Введите название пиццы"
+        required
       />
     </label>
     <drop-area class="content__constructor" @drop="onItemDrop">
