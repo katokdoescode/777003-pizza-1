@@ -1,7 +1,5 @@
 <template>
-  <component :is="layout">
-    <slot />
-  </component>
+  <component :is="layout" />
 </template>
 <script>
 const defaultLayout = "AppLayoutDefault";
