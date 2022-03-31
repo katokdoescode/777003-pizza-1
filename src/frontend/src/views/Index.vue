@@ -36,8 +36,9 @@
           v-model="pizzaName"
         >
           <builder-price-counter
-            :price="totalPrice ? totalPrice : 0"
+            :price="totalPrice || 0"
             :pizzaHasName="pizzaHasName"
+            :pizzaHasIngredients="pizzaHasIngredients"
           />
         </builder-pizza-view>
       </div>
@@ -96,8 +97,12 @@ export default {
         : total;
     },
     pizzaHasName() {
-      // console.log(this.pizzaName ?? false ? true : false);
-      return this.pizzaName ?? false ? true : false;
+      return !!this.pizzaName;
+    },
+    pizzaHasIngredients() {
+      return Object.values(this.order.selectedIngredients).some(
+        (value) => value != 0
+      );
     },
   },
   methods: {
