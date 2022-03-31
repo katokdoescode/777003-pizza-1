@@ -1,7 +1,11 @@
 <template>
   <div class="content__result">
     <p>Итого: {{ price }} ₽</p>
-    <button type="button" class="button" :disabled="price <= 0">
+    <button
+      type="submit"
+      class="button"
+      :disabled="price <= 0 || !pizzaHasName"
+    >
       Готовьте!
     </button>
   </div>
@@ -13,6 +17,10 @@ export default {
     price: {
       type: Number,
       default: 0,
+    },
+    pizzaHasName: {
+      type: Boolean,
+      default: false,
     },
   },
 };
